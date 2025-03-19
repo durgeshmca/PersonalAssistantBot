@@ -1,0 +1,23 @@
+langchain
+langchain_core
+langchain_chroma
+bs4
+matplotlib
+langchain-ollama
+feedparser
+langchain-postgres
+psycopg_binary
+# psycopg_c
+fastapi
+pyjwt
+passlib[bcrypt]
+sqlmodel
+python-multipart
+langgraph 
+psycopg 
+psycopg-pool 
+langgraph 
+langgraph-checkpoint-postgres
+langchain-groq
+langchain-huggingface
+python-dotenv
