@@ -10,6 +10,6 @@ class Settings(BaseSettings):
     PG_COLLECTION_NAME : str
     CHAT_COLLECTION_NAME : str = "chat_vectors"
     CHAT_HISTORY_TABLE_NAME :str = "chat_history"
-    model_config : SettingsConfigDict = SettingsConfigDict(env_file='.env',extra="ignore")
+    model_config : SettingsConfigDict = SettingsConfigDict(env_file='../../.env',extra="ignore")
 
 Config = Settings()

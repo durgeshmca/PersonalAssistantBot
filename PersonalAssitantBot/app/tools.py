@@ -1,6 +1,8 @@
 from app.lib.doc_tools import document_retriver_tool
 from app.lib.chat_tools import chat_retriever_tool
 from langchain_community.tools import TavilySearchResults
+from dotenv import load_dotenv
+load_dotenv()
 
 search_tool = TavilySearchResults(k=6)
 
