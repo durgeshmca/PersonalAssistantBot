@@ -4,8 +4,7 @@ from app.routers.auth import  auth_router
 from app.routers.users import users_router
 from app.routers.chats import chat_router
 from dotenv import load_dotenv
-import os
-print(os.getenv('TAVILY_API_KEY'))
+
 load_dotenv()
 
 app = FastAPI()

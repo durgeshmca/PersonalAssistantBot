@@ -2,8 +2,13 @@ from fastapi import APIRouter,Body,Depends,UploadFile,File
 from app.models.users import UserBase
 from app.models.chat import Chat
 from app.lib.agents import agent_with_history
+from app.lib.langgraph_agents import get_agent,embedding
+from langgraph.store.postgres import PostgresStore
+from langgraph.checkpoint.postgres import PostgresSaver
+from psycopg import Connection
 from typing import Annotated
 from app.auth import get_current_active_user
+from app.config import Config
 import os
 from app.lib.doc_tools import vectore_store
 
@@ -28,11 +33,23 @@ async def chat_message(
                 else:
                         raise Exception("Only PDF files are supported at the moment.")
                 
-        response = response = agent_with_history.invoke(
-            {"input": chat.message,"user_name":current_user.first_name, "user_email":current_user.email},
-            config={"configurable": {"session_id": str(current_user.user_uuid)}},
-        )
-        return response
+        with PostgresStore.from_conn_string(
+            conn_string=Config.PG1_CONNECTION,index={
+                "embed": embedding,
+                "dims": 384,
+                "fields": ["text"]  # specify which fields to embed. Default is the whole serialized valu
+            }
+        ) as store :
+            with Connection.connect(Config.PG1_CONNECTION) as conn:
+                checkpointer = PostgresSaver(conn=conn)
+                # checkpointer.setup()
+                agent_with_history = get_agent(store,checkpointer)
+                response = agent_with_history.invoke(input={"messages": [{"role": "user", "content": chat.message}],"user_id":str(current_user.user_uuid)},
+                                                    config={"configurable": {"thread_id": "1","user_id": str(current_user.user_uuid)}},
+                                                    stream_mode="values"
+                                            )
+                return response['messages'][-1]
+   
 
 
 
