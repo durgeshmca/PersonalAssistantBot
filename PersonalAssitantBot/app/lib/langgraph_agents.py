@@ -80,7 +80,6 @@ def get_agent(store:BaseStore, checkpointer):
         state_schema=CustomState,
         checkpointer = checkpointer,
     )
-    agent_with_history
     return agent_with_history
 
 

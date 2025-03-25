@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 class Chat(BaseModel):
-    session_id : str | None =None
+    thread_id : str | None = 'common'
     message : str
 
